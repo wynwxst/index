@@ -1,0 +1,19 @@
+{
+  "name": "upm",
+  "version": "1.0.0",
+  "description": "A universal package manager",
+  "main": "main.js",
+  "scripts": {
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "start": "electron ."
+  },
+  "author": "Apollyon9",
+  "license": "ISC",
+  "dependencies": {
+    "python-shell": "^3.0.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^15.3.0"
+  }
+}

@@ -1,0 +1,11 @@
+__pycache__/*
+upmcore/njs/__pycache__/*
+upmcore/python/__pycache__/*
+upmcore/ruby/__pycache__/*
+upmindex/njs/__pycache__/*
+upmindex/python/__pycache__/*
+upmindex/ruby/__pycache__/*
+upmguess/__pycache__/*
+upmgui/resources/app/node_modules/*
+upmgui/*
+upmgui/upm.exe
