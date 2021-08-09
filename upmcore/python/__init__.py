@@ -51,6 +51,11 @@ def remover(args):
     else:
       print("Exiting...")
       exit()
+  if conf == False:
+      for item in packages:
+          if item != "-y":
+            print(f"--> python -m poetry remove {item}")
+            os.system(f"python -m poetry remove {item}")
 
 def lock():
   print("[Upm]: Updating package configuration")
@@ -94,3 +99,8 @@ def install(args):
       else:
         print("Exiting...")
         exit()
+    if conf == False:
+      for item in packages:
+          if item != "-y":
+            print(f"--> python -m poetry add {item}")
+            os.system(f"python -m poetry add {item}")

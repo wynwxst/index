@@ -11,6 +11,7 @@ def guess():
     py = 0
     njs = 0
     rb = 0
+    el = 0
     other = 0
     for file in os.listdir(os.getcwd()):
         if os.path.isfile(f"{os.getcwd()}/{file}"):
@@ -21,6 +22,8 @@ def guess():
                 njs += 1
             if file.endswith(".rb"):
                 rb += 1
+            if file.endswith(".el"):
+                el += 1
             if file.endswith(".js") == False and file.endswith(".py") == False and file != "pyproject.toml" and file != "package.json" and file != "Gemfile":
                 other += 1
     if "Gemfile" in files:
@@ -29,6 +32,8 @@ def guess():
         py += 1
     if "package.json" in files:
         njs += 1
+    if "Cask" in files:
+        el += 1
     if py != 0:
         percentage = py / len(files)
         percentage = percentage * 100
@@ -44,6 +49,11 @@ def guess():
         percentage = percentage * 100
         percentage = round(percentage)
         toprint += f"Ruby: {percentage}%\n"
+    if el != 0:
+        percentage = el / len(files)
+        percentage = percentage * 100
+        percentage = round(percentage)
+        toprint += f"Elisp: {percentage}%\n"
     percentage = other / len(files)
     percentage = percentage * 100
     percentage = round(percentage)
@@ -57,8 +67,9 @@ def alz():
     files = []
     py = 0
     njs = 0
-    largest = [0,0]
     rb = 0
+    el = 0
+    largest = [0,0]
     other = 0
     for file in os.listdir(os.getcwd()):
         if os.path.isfile(f"{os.getcwd()}/{file}"):
@@ -69,6 +80,8 @@ def alz():
                 njs += 1
             if file.endswith(".rb"):
                 rb += 1
+            if file.endswith(".el"):
+                el += 1
             if file.endswith(".js") == False and file.endswith(".py") == False and file != "pyproject.toml" and file != "package.json" and file != "Gemfile":
                 other += 1
     if "Gemfile" in files:
@@ -77,6 +90,8 @@ def alz():
         py += 1
     if "package.json" in files:
         njs += 1
+    if "Cask" in files:
+        el += 1
     if py != 0:
         percentage = py / len(files)
         percentage = percentage * 100
@@ -95,9 +110,15 @@ def alz():
         percentage = round(percentage)
         rb = percentage
         toprint += f"Ruby: {percentage}%\n"
+    if el != 0:
+        percentage = el / len(files)
+        percentage = percentage * 100
+        percentage = round(percentage)
+        toprint += f"Elisp: {percentage}%\n"
     pcs.append(f"rb {rb}")
     pcs.append(f"py {py}")
     pcs.append(f"njs {njs}")
+    pcs.append(f"el {el}")
     for item in pcs:
         item = item.split()
         print(item[1])

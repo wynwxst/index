@@ -7,5 +7,4 @@ upmindex/python/__pycache__/*
 upmindex/ruby/__pycache__/*
 upmguess/__pycache__/*
 upmgui/resources/app/node_modules/*
-upmgui/*
-upmgui/upm.exe
+umpcore/elisp/__pycache__/*

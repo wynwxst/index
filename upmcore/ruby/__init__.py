@@ -47,7 +47,11 @@ def remover(args):
     else:
       print("Exiting...")
       exit()
-
+  if conf == False:
+    for item in packages:
+      if item != "-y":
+        print(f"--> bundle remove {item}")
+        os.system(f"bundle remove {item}")
 
 def install(args):
   conf = True
@@ -79,3 +83,8 @@ def install(args):
       else:
         print("Exiting...")
         exit()
+    if conf == True:
+        for item in packages:
+          if item != "-y":
+            print(f"--> bundle add {item}")
+            os.system(f"bundle add {item}")    

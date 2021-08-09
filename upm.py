@@ -12,7 +12,9 @@ from upmcore import njs as corenjs
 from upmindex import njs as indexnjs
 from upmcore import ruby as corerb
 from upmindex import ruby as indexrb
+from upmcore import elisp as coreel
 import upmguess as guess
+
 
 
 def send_help():
@@ -87,6 +89,13 @@ def upm():
                 corerb.install(args)
             if "in" == args[0] or "info" == args[0]:
                 indexrb.info(args)
+          if arg == "el" or arg == "elisp":
+            if "li" == args[0] or "list" == args[0]:
+                coreel.list()
+            if "r" == args[0] or "remove" == args[0]:
+              coreel.remover(args)
+            if "i" == args[0] or "install" == args[0] or "add" == args[0]:
+                coreel.install(args)
         if opt in ["-i","--install"]:
             list = ["install"]
             list.append(arg)

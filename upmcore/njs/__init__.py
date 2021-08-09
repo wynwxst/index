@@ -44,6 +44,11 @@ def remover(args):
     else:
       print("Exiting...")
       exit()
+  if conf == False:
+    for item in packages:
+      if item != "-y":
+        print(f"--> npm remove {item}")
+        os.system(f"npm remove {item}")
 
 
 def install(args):
@@ -76,3 +81,8 @@ def install(args):
       else:
         print("Exiting...")
         exit()
+    if conf  == False:
+        for item in packages:
+          if item != "-y":
+            print(f"--> npm add {item}")
+            os.system(f"npm add {item}")
