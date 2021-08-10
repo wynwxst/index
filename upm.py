@@ -34,6 +34,8 @@ def send_help():
     print("--default  : upm guesses the main language and runs that default installation eg. npm install\n")
 
 
+
+
 def run(command):
     subprocess.check_output(command,shell=True)
 
@@ -42,7 +44,7 @@ def upm():
     argv = sys.argv[1:]
     opts = []
     try:
-      opts, args = getopt.getopt(argv, "l:hgi:pr:rcn:s:d",["language =","help","guess","install =","install","project","remove =","remove","lock","info =","search =","listlangs","als","default","src =","source ="])
+      opts, args = getopt.getopt(argv, "l:hgi:pr:rcn:s:dp:",["language =","help","guess","install =","install","project","remove =","remove","lock","info =","search =","listlangs","als","default","src =","source =","plugin =","dep","dependencies"])
 
     except:
         print("ERROR: Invalid arguments provided.")
@@ -116,7 +118,7 @@ def upm():
                 corenjs.lock()
             if lang == "rb":
                 corerb.lock()
-        if opt in ["-p","--project"]:
+        if opt in ["-dep","--dependencies"]:
             lang = guess.alz()
             if lang == "python":
                 corepy.list()
@@ -177,6 +179,18 @@ def upm():
                 corenjs.install(list)
             if lang == "rb":
                 corerb.install(list)
+        if opt in ["-p","--plugin"]:
+            plugins = []
+            for file in os.listdir("upmplugins/"):
+                plugins.append(file)
+            if args[0] not in plugins:
+                return print("[Upm]: Plugin not found.")
+            else:
+                output = ""
+                for item in args:
+                    if item != args[0]:
+                        output += item
+                os.system(f"cd upmplugins && python {args[0]} {output}")
        #if opt in ["--src","--source"]:
 
 

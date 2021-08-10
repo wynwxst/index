@@ -3,18 +3,34 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 25%;
-}
 body {
+  overflow: hidden; /* Hide scrollbars */
   background-color: black;
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
+}
+.w3-btn {width:150px;}
+.btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.box {
+  width: 320px;
+  padding: 10px;
+  border: 2px solid grey;
+  margin: 0;
+}
+.wrap {
+  float: left;
+  margin: 0 15px 0 0;
+  border-radius: 50%;
 }
 body {
   margin: 0;
@@ -76,7 +92,6 @@ body {
 </style>
 </head>
 <body>
-
 <div class="navbar" id="mynavbar">
   <a href="http://localhost:5000/packages/" class="active">Packages</a>
   <a href="http://localhost:5000/sources/" class="active">Sources</a>
@@ -86,21 +101,17 @@ body {
     <i class="fa fa-bars"></i>
   </a>
 </div>
-
-<div style="padding-left:16px">
+<div>
+  <hr style="width:100%;text-align:left;margin-left:0;border-top: 2px dotted darkgrey;">
+  <img src=
+  "https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png"
+       alt="GeeksforGeeks logo"
+       class="wrap" width="50" height="50">
+  <p><button class="w3-button w3-green w3-round-xxlarge" style="float: right;"><i class="fa fa-folder"></i> View source</button></p>
+  <h4 style = "color:white;"> Source </h4>
+  <p style = "color: #d3d3d3;font-size: 10px;"> source link </p>
+  <hr style="width:100%;text-align:left;margin-left:0;border-top: 2px dotted darkgrey;">
 
 </div>
-
-<script>
-function myFunction() {
-  var x = document.getElementById("mynavbar");
-  if (x.className === "navbar") {
-    x.className += " responsive";
-  } else {
-    x.className = "navbar";
-  }
-}
-</script>
-
 </body>
 </html>

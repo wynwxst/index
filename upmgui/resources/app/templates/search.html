@@ -2,19 +2,31 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 25%;
-}
 body {
+  overflow: hidden; /* Hide scrollbars */
   background-color: black;
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
+}
+input[type=text] {
+  width: 130px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: DarkGrey;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+  width: 100%;
+}
 }
 body {
   margin: 0;
@@ -87,20 +99,17 @@ body {
   </a>
 </div>
 
-<div style="padding-left:16px">
 
+
+
+<form id="myform" action="/search/">
+  <input type="text" name="query" placeholder="Search..">
+  <script>
+    document.getElementById("myForm").submit();
+  </script>
+</form>
+<div>
+  
 </div>
-
-<script>
-function myFunction() {
-  var x = document.getElementById("mynavbar");
-  if (x.className === "navbar") {
-    x.className += " responsive";
-  } else {
-    x.className = "navbar";
-  }
-}
-</script>
-
 </body>
 </html>
