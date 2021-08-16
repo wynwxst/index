@@ -56,8 +56,11 @@ if platform == "win32" or platform == "win64":
     version = input("Version of build?
     run("touch build.iss")
     with open("build.iss","w") as build-iss:
-        build-iss.write(str(winwrite(name,author,path,version,"https://github.com/apollyon9/upm")))
-    print("--> Created Build Script!\nplease use inno setup to compile build.iss")
+        build-iss.write(str(winwrite(name,author,path,version,"https://github.com/k0nami/upm")))
+    print("--> Created Build Script!\nplease use inno setup to compile build.iss for the installer")
+    print("--> Building binary....")
+    os.system("python setup.py py2exe")
+    print("--> Built binary in dist/")
 elif platform == "linux" or platform == "linux2" or platform == "darwin":
     print("--> Installing dependencies...")
     run("sudo pip install nuitka")

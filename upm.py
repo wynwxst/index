@@ -17,6 +17,7 @@ from upmcore import elisp as coreel
 import upmguess as guess
 import ctypes
 from funcs import *
+import requests
 
 
 def isAdmin():
@@ -26,6 +27,8 @@ def isAdmin():
         is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
     return is_admin
 
+
+
 if platform == "win32" or platform == "win64":
     dpath = f"{os.getenv('APPDATA')}/upm"
     path = os.getenv('APPDATA')
@@ -33,9 +36,42 @@ elif platform == "linux" or platform == "linux2" or platform == "darwin":
     dpath = "/etc/upm"
     path = "/etc"
 
+files = []
+for file in os.listdir(f"{path}/"):
+   files.append(file)
+if "upm" not in files:
+    if isAdmin() == False:
+        print("Error: Administrator is required for the first run !")
+    else:
+
+       print("--> Creating data core...")
+       os.system(f"cd {path} && mkdir upm")
+       os.system(f"cd {path}/upm && mkdir plugins")
+       os.system(f"touch {path}/upm/config.json")
+       os.system(f"touch {path}/upm/sources.json")
+       with open(f"{path}/upm/config.json") as config:
+           config.write("{}")
+       with open(f"{path}/upm/sources.json") as sources:
+           sources.write("{}")
+       version = requests.request("GET",url="https://raw.githubusercontent.com/k0nami/upm/main/version.txt")
+       with open(f"{path}/upm/version.txt") as ver:
+           ver.write(version.text)
+       print("--> Created data core !")
+
+try:
+    version = requests.request("GET",url="https://raw.githubusercontent.com/k0nami/upm/main/version.txt")
+    version = int(version.text)
+    f = open(f"{dpath}/version.txt","r")
+    content = f.load()
+    content = int(content)
+    if version > content:
+        print("An update is availiable! Please type upm --update or get it manually from the github.")
+except:
+    ok = "ok"
+
 def send_help():
     print('USAGE: upm [options]')
-    print('A Universal package manager\n')
+    print('A Universal package manager created by k0nami\n')
     print('Basic options:\n')
     print('--language : Pick a language to use\n')
     print('--install  : install package(s)\n')
@@ -197,7 +233,7 @@ def upm():
                 corerb.install(list)
         if opt in ["-p","--plugin"]:
             plugins = []
-            for file in os.listdir("{dpath}/upm/plugins"):
+            for file in os.listdir(f"{dpath}/plugins"):
                 plugins.append(file)
             if args[0] not in plugins:
                 return print("[Upm]: Plugin not found.")
@@ -206,24 +242,10 @@ def upm():
                 for item in args:
                     if item != args[0]:
                         output += item
-                os.system(f"cd {dpath}/upm/plugins && python {args[0]} {output}")
+                os.system(f"cd {dpath}/plugins && python {args[0]} {output}")
         if opt in ["-a","--pm"] or sys.argv[1] in ["-a","--pm"]:
             if isAdmin() == False:
                 return print("Error: Administrator is required for sources")
-            files = []
-            for file in os.listdir(f"{path}/"):
-               files.append(file)
-            if "upm" not in files:
-               print("--> Creating source core...")
-               os.system(f"cd {path} && mkdir upm")
-               os.system(f"cd {path}/upm && mkdir plugins")
-               os.system(f"touch {path}/upm/config.json")
-               os.system(f"touch {path}/upm/sources.json")
-               with open(f"{path}/upm/config.json") as config:
-                   config.write("{}")
-               with open(f"{path}/upm/sources.json") as sources:
-                   sources.write("{}")
-               print("--> Created source core !")
             if "add" == arg or "+" == arg:
                 if args == []:
                     return print("Error: Please include add arguments eg. upm --source add <alias> <link to source>")
