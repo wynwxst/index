@@ -42,6 +42,7 @@ for file in os.listdir(f"{path}/"):
 if "upm" not in files:
     if isAdmin() == False:
         print("Error: Administrator is required for the first run !")
+        sys.exit(1)
     else:
 
        print("--> Creating data core...")
@@ -49,23 +50,29 @@ if "upm" not in files:
        os.system(f"cd {path}/upm && mkdir plugins")
        os.system(f"touch {path}/upm/config.json")
        os.system(f"touch {path}/upm/sources.json")
-       with open(f"{path}/upm/config.json") as config:
+       os.system(f"touch {path}/upm/version.txt")
+       with open(f"{path}/upm/config.json","w") as config:
            config.write("{}")
-       with open(f"{path}/upm/sources.json") as sources:
+       with open(f"{path}/upm/sources.json","w") as sources:
            sources.write("{}")
-       version = requests.request("GET",url="https://raw.githubusercontent.com/k0nami/upm/main/version.txt")
-       with open(f"{path}/upm/version.txt") as ver:
+       version = requests.request("GET",url="https://k0nami.github.io/upm/version.txt")
+       with open(f"{path}/upm/version.txt","w") as ver:
            ver.write(version.text)
        print("--> Created data core !")
 
 try:
-    version = requests.request("GET",url="https://raw.githubusercontent.com/k0nami/upm/main/version.txt")
-    version = int(version.text)
+    version = requests.request("GET",url="https://k0nami.github.io/upm/version.txt")
+    version = version.text
+    version = version.replace("\n","")
+    version  =version.replace(" ","")
+    version = int(version)
     f = open(f"{dpath}/version.txt","r")
-    content = f.load()
+    content = f.read()
+    content = content.replace("\n","")
+    content  = content.replace(" ","")
     content = int(content)
     if version > content:
-        print("An update is availiable! Please type upm --update or get it manually from the github.")
+        print("-----\nAn update is availiable! Please type upm --update or get it manually from the github.\n-----")
 except:
     ok = "ok"
 
