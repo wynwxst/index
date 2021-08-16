@@ -1,11 +1,12 @@
 #!/usr/bin/python3
-
+import argparse
 import time
 import sys
 import getopt
 import subprocess
 import os
-
+import sys
+from sys import platform
 from upmcore import python as corepy
 from upmindex import python as indexpy
 from upmcore import njs as corenjs
@@ -14,8 +15,23 @@ from upmcore import ruby as corerb
 from upmindex import ruby as indexrb
 from upmcore import elisp as coreel
 import upmguess as guess
+import ctypes
+from funcs import *
 
 
+def isAdmin():
+    try:
+        is_admin = (os.getuid() == 0)
+    except AttributeError:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+    return is_admin
+
+if platform == "win32" or platform == "win64":
+    dpath = f"{os.getenv('APPDATA')}/upm"
+    path = os.getenv('APPDATA')
+elif platform == "linux" or platform == "linux2" or platform == "darwin":
+    dpath = "/etc/upm"
+    path = "/etc"
 
 def send_help():
     print('USAGE: upm [options]')
@@ -34,7 +50,7 @@ def send_help():
     print("--default  : upm guesses the main language and runs that default installation eg. npm install\n")
 
 
-
+advanced = ["language =","help","guess","install =","install","project","remove =","remove","lock","info =","search =","listlangs","als","default","plugin =","dep","dependencies","pm ="]
 
 def run(command):
     subprocess.check_output(command,shell=True)
@@ -44,7 +60,7 @@ def upm():
     argv = sys.argv[1:]
     opts = []
     try:
-      opts, args = getopt.getopt(argv, "l:hgi:pr:rcn:s:dp:",["language =","help","guess","install =","install","project","remove =","remove","lock","info =","search =","listlangs","als","default","src =","source =","plugin =","dep","dependencies"])
+      opts, args = getopt.getopt(argv, "l:hgi:pr:rcn:s:dp:a:",advanced)
 
     except:
         print("ERROR: Invalid arguments provided.")
@@ -181,7 +197,7 @@ def upm():
                 corerb.install(list)
         if opt in ["-p","--plugin"]:
             plugins = []
-            for file in os.listdir("upmplugins/"):
+            for file in os.listdir("{dpath}/upm/plugins"):
                 plugins.append(file)
             if args[0] not in plugins:
                 return print("[Upm]: Plugin not found.")
@@ -190,8 +206,35 @@ def upm():
                 for item in args:
                     if item != args[0]:
                         output += item
-                os.system(f"cd upmplugins && python {args[0]} {output}")
-       #if opt in ["--src","--source"]:
+                os.system(f"cd {dpath}/upm/plugins && python {args[0]} {output}")
+        if opt in ["-a","--pm"] or sys.argv[1] in ["-a","--pm"]:
+            if isAdmin() == False:
+                return print("Error: Administrator is required for sources")
+            files = []
+            for file in os.listdir(f"{path}/"):
+               files.append(file)
+            if "upm" not in files:
+               print("--> Creating source core...")
+               os.system(f"cd {path} && mkdir upm")
+               os.system(f"cd {path}/upm && mkdir plugins")
+               os.system(f"touch {path}/upm/config.json")
+               os.system(f"touch {path}/upm/sources.json")
+               with open(f"{path}/upm/config.json") as config:
+                   config.write("{}")
+               with open(f"{path}/upm/sources.json") as sources:
+                   sources.write("{}")
+               print("--> Created source core !")
+            if "add" == arg or "+" == arg:
+                if args == []:
+                    return print("Error: Please include add arguments eg. upm --source add <alias> <link to source>")
+                addsrc(dpath,args[0],args[1])
+            if "remove" == arg or "-" == arg:
+                if args == []:
+                    return print("Error: Please include add arguments eg. upm --source remove <alias>")
+                removesrc(dpath,args[0])
+            if "update" == arg:
+                update(dpath)
+
 
 
 upm()
