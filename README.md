@@ -58,4 +58,8 @@ guess - `upm guess` `upm analyze`
 | Elisp    | yes  |  x    | yes   |
 
 ### Installation:
-TBA once data paths are finalized
+Simply go to the dist folder and select a version of your choice, all the core files are in the .zip file
+
+### Building:
+`pip install py2exe`
+`make`
