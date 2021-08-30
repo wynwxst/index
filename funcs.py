@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 def getgithubcom(repolink):
     repostuffs = repolink.replace("https://github.com/","")
     repostuffs = repolink.replace("github.com/","")
@@ -13,6 +14,29 @@ def getgithubcom(repolink):
     linktocfg = f"https://raw.githubusercontent.com/{author}/{modname}/main/"
     return linktocfg
 
+def add2upm(lang,args):
+    exec = args
+    files = []
+    for file in os.listdir(os.getcwd()):
+        files.append(file)
+    if "upm.json" in files:
+        with open(f"{os.getcwd()}/upm.json") as l:
+            upx = json.load(l)
+    if exec[0] in ["install","i","add"]:
+        packages = args
+        packages.remove(exec[0])
+
+        for item in packages:
+            if item not in upx[lang]:
+                upx[lang].append(item)
+    if exec[0] in ["remove","r"]:
+        packages = args
+        packages.remove(exec[0])
+        for item in packages:
+            if item not in upx[lang]:
+                upx[lang].remove(item)
+    with open(f"{os.getcwd()}/upm.json","w") as l:
+        json.dump(upx,l)
 def addsrc(dpath,alias,link):
     link = link.replace("https://","")
     link = f"https://{link}"

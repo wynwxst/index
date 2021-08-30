@@ -19,6 +19,13 @@ import ctypes
 from funcs import *
 import requests
 
+def all(opt,arg,args):
+    print(opt)
+    print(arg)
+    print(args)
+    list = ["install"]
+    for item in args:
+        list.append(item)
 
 def isAdmin():
     try:
@@ -60,21 +67,7 @@ if "upm" not in files:
            ver.write(version.text)
        print("--> Created data core !")
 
-try:
-    version = requests.request("GET",url="https://k0nami.github.io/upm/version.txt")
-    version = version.text
-    version = version.replace("\n","")
-    version  =version.replace(" ","")
-    version = int(version)
-    f = open(f"{dpath}/version.txt","r")
-    content = f.read()
-    content = content.replace("\n","")
-    content  = content.replace(" ","")
-    content = int(content)
-    if version > content:
-        print("-----\nAn update is availiable! Please type upm --update or get it manually from the github.\n-----")
-except:
-    ok = "ok"
+
 
 def send_help():
     print('USAGE: upm [options]')
@@ -93,7 +86,7 @@ def send_help():
     print("--default  : upm guesses the main language and runs that default installation eg. npm install\n")
 
 
-advanced = ["language =","help","guess","install =","install","project","remove =","remove","lock","info =","search =","listlangs","als","default","plugin =","dep","dependencies","pm ="]
+advanced = ["language =","help","guess","install =","install","project","remove =","remove","lock","info =","search =","listlangs","als","default","plugin =","dep","dependencies","pm =","init","start"]
 
 def run(command):
     subprocess.check_output(command,shell=True)
@@ -121,11 +114,16 @@ def upm():
             if "li" == args[0] or "list" == args[0]:
                 corepy.list()
             if "r" == args[0] or "remove" == args[0]:
-              corepy.remover(args)
+
+                corepy.remover(args)
+                add2upm("Python",args)
             if "l" == args[0] or "lock" == args[0]:
                 corepy.lock()
             if "i" == args[0] or "install" == args[0] or "add" == args[0]:
+                print(args)
+
                 corepy.install(args)
+                add2upm("Python",args)
             if "in" == args[0] or "info" == args[0]:
                 indexpy.info(args)
           if arg == "njs" or arg == "nodejs":
@@ -134,9 +132,12 @@ def upm():
             if "li" == args[0] or "list" == args[0]:
                 corenjs.list()
             if "r" == args[0] or "remove" == args[0]:
-              corenjs.remover(args)
+                corenjs.remover(args)
+                add2upm("Nodejs",args)
             if "i" == args[0] or "install" == args[0] or "add" == args[0]:
+
                 corenjs.install(args)
+                add2upm("Nodejs",args)
             if "in" == args[0] or "info" == args[0]:
                 indexnjs.info(args)
           if arg == "rb" or arg == "ruby":
@@ -145,19 +146,48 @@ def upm():
             if "li" == args[0] or "list" == args[0]:
                 corerb.list()
             if "r" == args[0] or "remove" == args[0]:
-              corerb.remover(args)
+
+                corerb.remover(args)
+                add2upm("Ruby",args)
             if "i" == args[0] or "install" == args[0] or "add" == args[0]:
+
                 corerb.install(args)
+                add2upm("Ruby",args)
             if "in" == args[0] or "info" == args[0]:
                 indexrb.info(args)
           if arg == "el" or arg == "elisp":
             if "li" == args[0] or "list" == args[0]:
                 coreel.list()
             if "r" == args[0] or "remove" == args[0]:
-              coreel.remover(args)
+
+                coreel.remover(args)
+                add2upm("Elisp",args)
             if "i" == args[0] or "install" == args[0] or "add" == args[0]:
+
                 coreel.install(args)
+                add2upm("Elisp",args)
+        if opt in ["--init"]:
+            temp = """
+{
+"Name": "Enter package name",
+"Author(s)": ["author1","author2","author3"],
+"Description": "An example package...",
+"Version": "0.0.1",
+"Run": "echo please enter a run script",
+"Python": [],
+"Nodejs": [],
+"Ruby": [],
+"Elisp": []
+}
+            """
+            print("--> Creating upm.json...")
+            os.system("touch upm.json")
+            with open(f"{os.getcwd()}/upm.json","w") as x:
+                x.write(temp)
+
         if opt in ["-i","--install"]:
+            files = []
+
             list = ["install"]
             list.append(arg)
             for item in args:
@@ -263,7 +293,31 @@ def upm():
                 removesrc(dpath,args[0])
             if "update" == arg:
                 update(dpath)
+        if opt in ["--start"] or sys.argv[1] in ["start"]:
+            files = []
+            for file in os.listdir(os.getcwd()):
+                files.append(file)
+            if "upm.json" in files:
+                with open(f"{os.getcwd()}/upm.json") as l:
+                    upx = json.load(l)
+            torun = upx["Run"]
+            print(f"""--> Running: "{torun}" """)
+            os.system(torun)
 
-
+try:
+    version = requests.request("GET",url="https://k0nami.github.io/upm/version.txt")
+    version = version.text
+    version = version.replace("\n","")
+    version  =version.replace(" ","")
+    version = int(version)
+    f = open(f"{dpath}/version.txt","r")
+    content = f.read()
+    content = content.replace("\n","")
+    content  = content.replace(" ","")
+    content = int(content)
+    if version > content:
+        print("-----\nAn update is availiable! Please type upm --update or get it manually from the github.\n-----")
+except:
+    ok = "ok"
 
 upm()
