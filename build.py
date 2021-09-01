@@ -1,5 +1,7 @@
 from sys import platform
 import os
+import zipfile
+from funcs import zip
 
 
 
@@ -7,9 +9,15 @@ def run(command):
     subprocess.check_output(command,shell=True)
 
 if platform == "win32" or platform == "win64":
+    ver = input("Build Version: ")
+    print("--> Creating directories...")
+    os.system(f"cd dist && mkdir {ver}")
+    os.system(f"cd dist/{ver} && mkdir src")
     print("--> Building binary....")
-    os.system("python setup.py py2exe")
-    print("--> Built binary in dist/")
+    os.system(f"python setup.py py2exe -d dist/{ver}/src/")
+    print(f"--> Built binary in dist/{ver}")
+    print("--> Building zip...")
+    zip(f"dist/{ver}/{ver}",f"dist/{ver}/src/")
 elif platform == "linux" or platform == "linux2" or platform == "darwin":
     print("--> Installing dependencies...")
     run("sudo pip install nuitka")

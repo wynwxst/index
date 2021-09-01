@@ -29,8 +29,8 @@ def search(args):
     while amt != "exit":
         try:
             #var = response[0]["metadata"]["package"]["name"]
-            for var in response[amt]:
-                print(var)
+            for var in response:
+                print(var["name"])
                 #if query in str(var):
                 #for word in str(var):
                     #print(word)

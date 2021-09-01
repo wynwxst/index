@@ -1,6 +1,8 @@
 import requests
 import json
 import os
+import shutil
+
 def getgithubcom(repolink):
     repostuffs = repolink.replace("https://github.com/","")
     repostuffs = repolink.replace("github.com/","")
@@ -115,3 +117,6 @@ def update(dpath):
             failed += 1
             print("ERROR: 'Unable to get release.json/packages.json from source'")
     print(f"---------\nGot {got} source(s)\nFailed {failed} source(s)")
+
+def zip(out,dir):
+    shutil.make_archive(out, 'zip', dir)
