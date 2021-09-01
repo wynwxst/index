@@ -18,7 +18,7 @@ if platform == "win32" or platform == "win64":
     print(f"--> Built binary in dist/{ver}")
     print("--> Building zip...")
     zip(f"dist/{ver}/{ver}",f"dist/{ver}/src/")
-elif platform == "linux" or platform == "linux2" or platform == "darwin":
+elif platform == "linux" or platform == "linux2":
     print("--> Installing dependencies...")
     run("sudo pip install nuitka")
     print("--> Building...")
