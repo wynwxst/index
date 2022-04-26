@@ -70,7 +70,7 @@ def lock():
   os.system("python -m poetry install")
 
 def install(args):
-  print(args)
+
   conf = True
   print("[Upm]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
@@ -78,7 +78,6 @@ def install(args):
   if "pyproject.toml" not in files:
     print("--> python -m poetry init --no-interaction")
     os.system("python -m poetry init --no-interaction")
-  print(len(args))
   if len(args) == 1 or args == []:
     print("--> python -m poetry install")
     os.system("python -m poetry install")
@@ -88,7 +87,10 @@ def install(args):
     packages.remove(packages[0])
     for item in packages:
       if item != "-y":
-        toprint += f"{item}, "
+        if item == packages[-1]:
+            toprint += f"{item} "
+        else:
+            toprint += f"{item}, "
       if item == "-y":
         conf = False
     if conf == True:

@@ -115,14 +115,12 @@ def alz():
         percentage = percentage * 100
         percentage = round(percentage)
         toprint += f"Elisp: {percentage}%\n"
-    pcs.append(f"rb {rb}")
-    pcs.append(f"py {py}")
-    pcs.append(f"njs {njs}")
-    pcs.append(f"el {el}")
+    pcs.append(f"ruby {rb}")
+    pcs.append(f"python {py}")
+    pcs.append(f"nodejs {njs}")
+    pcs.append(f"elisp {el}")
     for item in pcs:
         item = item.split()
-        print(item[1])
-        print(item)
         if int(item[1]) > int(largest[1]):
             largest = item
     return largest[0]

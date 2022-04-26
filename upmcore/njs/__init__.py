@@ -68,7 +68,10 @@ def install(args):
     packages.remove(packages[0])
     for item in packages:
       if item != "-y":
-        toprint += f"{item}, "
+        if item == packages[-1]:
+            toprint += f"{item} "
+        else:
+            toprint += f"{item}, "
       if item == "-y":
         conf = False
     if conf == True:
