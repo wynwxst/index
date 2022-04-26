@@ -19,6 +19,15 @@ import ctypes
 from funcs import *
 import requests
 from os import system as execa
+
+def load(f,m="r"):
+    if sys.platform.startswith("win") == False:
+        f = f.replace("\\","/")
+        return open(f,m)
+    else:
+        f = f.replace("/","\\")
+        return open(f,m)
+
 def run(command):
     return subprocess.check_output(command,shell=True).decode("utf-8")
 def execute(c,s=False):
@@ -45,6 +54,10 @@ def execute(c,s=False):
                 return e
     return
 def execai(c):
+    if sys.platform.startswith("win"):
+        c = c.replace("/","\\")
+    else:
+        c = c.replace("\\","/")
     if c.startswith("s:"):
         c = c.replace("s:","")
         return run(c)
@@ -79,41 +92,39 @@ def isAdmin():
 
 
 if platform == "win32" or platform == "win64":
-    dpath = f"{os.getenv('APPDATA')}/upm"
+    dpath = f"{os.getenv('APPDATA')}\\index"
     path = os.getenv('APPDATA')
 elif platform == "linux" or platform == "linux2" or platform == "darwin":
-    dpath = "/etc/upm"
+    dpath = "/etc/index"
     path = "/etc"
 
 files = []
 for file in os.listdir(f"{path}/"):
    files.append(file)
-if "upm" not in files:
+if "index" not in files:
     if isAdmin() == False:
         print("Error: Administrator is required for the first run !")
         sys.exit(1)
     else:
 
        print("--> Creating data core...")
-       os.system(f"cd {path} && mkdir upm")
-       os.system(f"cd {path}/upm && mkdir plugins")
-       os.system(f"touch {path}/upm/config.json")
-       os.system(f"touch {path}/upm/sources.json")
-       os.system(f"touch {path}/upm/version.txt")
-       with open(f"{path}/upm/config.json","w") as config:
-           config.write("{}")
-       with open(f"{path}/upm/sources.json","w") as sources:
-           sources.write("{}")
-       version = requests.request("GET",url="https://k0nami.github.io/upm/version.txt")
-       with open(f"{path}/upm/version.txt","w") as ver:
-           ver.write(version.text)
+       os.system(f"s:cd {path} && mkdir index")
+       os.system(f"s:cd {path}/index && mkdir plugins")
+
+       config = load(f"{path}/index/config.json","w+")
+       config.write('{"pypackager":"poetry add"}')
+       sources = load(f"{path}/index/sources.json","w+")
+       sources.write("{}")
+       version = requests.request("GET",url="https://n30nyx.github.io/index/version.txt")
+       ver = load(f"{path}/index/version.txt","w+")
+       ver.write(version.text)
        print("--> Created data core !")
 
 
 
 def send_help():
-    print('USAGE: upm [options]')
-    print('A Universal package manager created by k0nami\n')
+    print('USAGE: index [options]')
+    print('A Universal package manager created by n30nyx\n')
     print('Basic options:\n')
     print('--language : Pick a language to use\n')
     print('--install  : install package(s)\n')
@@ -125,7 +136,7 @@ def send_help():
     print("--listlangs: list lanuages availiable\n")
     print("--als      : check aliases for lanuages\n")
     print("--guess    : guess the main language\n")
-    print("--default  : upm guesses the main language and runs that default installation eg. npm install\n")
+    print("--default  : index guesses the main language and runs that default installation eg. npm install\n")
 
 
 advanced = ["language =","help","guess","install =","install","project","remove =","remove","lock","info =","search =","listlangs","als","default","plugin =","dep","dependencies","pm =","init","start"]
@@ -138,12 +149,49 @@ def upm():
     opt = x.flag
     arg = x.arg
     args = x.args
+    if opt in ["-v","version"]:
+        ver = load(f"{path}/index/version.txt","r")
+        print(ver.read())
 
 
+
+    if opt in ["add"]:
+
+        l = arg
+        prefix = arg[0]
+        l = arg[1:]
+        prefix = prefix.upper()
+        l = l.lower()
+        l = prefix + l
+        print(f"--> Adding {args[0]} to {l} dependencies...")
+        conf = cfg()
+        conf[l].append(args[0])
+        json.dump(conf,load("index.json","w"),indent=4)
+        opt = "-l"
+        arg = l.lower()
+        args = ["install","-y",args[0]]
+    if opt in ["-gen","generate"]:
+        if arg == "env":
+            tw = ""
+            conf = cfg()
+            if conf["env"]["silent"] == "false":
+                log("Compiling env...")
+            for var in conf["env"]:
+                val = conf["env"][var]
+                tw += f"\n{var}={val}\n"
+            with open(".env","w+") as en:
+                en.write(tw)
 
 
     if opt in ["-h","help"]:
       send_help()
+    if opt.startswith("@"):
+        tr = opt[1:]
+        conf = cfg()
+        if tr not in conf["Scripts"]:
+            print("Error: Unable to find script")
+        else:
+            os.system(conf["Scripts"][tr])
     if opt in ["get"]:
         if arg == "pip":
             log("Downloading pip...")
@@ -166,9 +214,11 @@ def upm():
             os.system("s:python3 get-poetry.py")
             log("Running Postinstall...")
             print("--> rm -rf get-poetry.py")
-            #os.remove("get-poetry.py")
-            #ver = os.system("s:poetry --version").split()[2]
-            #log(f"Installed poetry v{ver}")
+            os.remove("get-poetry.py")
+            ver = os.system("s:poetry --version").split()[2]
+            log(f"Installed poetry v{ver}")
+    if opt == "":
+        send_help()
     if opt in ["-g","guess"]:
         guess.guess()
     if opt in ['-l',"language"]:
@@ -183,8 +233,8 @@ def upm():
             add2upm("Python",args)
         if "l" == args[0] or "lock" == args[0]:
             corepy.lock()
-        if "i" == args[0] or "install" == args[0] or "add" == args[0]:
-            print(args)
+        if "i" == args[0] or "install" == args[0]:
+
 
             corepy.install(args)
             add2upm("Python",args)
@@ -237,8 +287,10 @@ def upm():
 "Author(s)": ["author1","author2","author3"],
 "Description": "An example package...",
 "Version": "0.0.1",
-"Run": "echo please enter a run script",
-"Main_file": "used to guess imports",
+"env": {"silent":"true","key":"secret"},
+"config":{"guess_imports":"true"},
+"Scripts":{"start":"echo put something here"},
+"Main_file": "used to guess imports by default",
 "Python": [],
 "Nodejs": [],
 "Ruby": [],
@@ -263,6 +315,17 @@ def upm():
                 else:
                     tp += f"{i}, "
             print(tp)
+    if opt in ["-cfg","config"]:
+        with open(f"{path}/index/config.json","r") as config:
+           d = json.load(config)
+        val = ""
+        for i in args:
+            val += f" {i}"
+        val = val[1:]
+
+        d[arg] = val
+        with open(f"{path}/index/config.json","w") as config:
+           json.dump(d,config)
 
     if opt in ["-imp","import"]:
         lang = guess.alz()
@@ -304,6 +367,43 @@ def upm():
         if lang == "rb":
             corerb.lock()
     if opt in ["-dep","dependencies"]:
+        conf = cfg()
+        pyv = []
+        njsv = []
+        rbv = []
+        elv = []
+
+
+        for val in conf["Python"]:
+            pyv.append(val)
+        if pyv != []:
+            print("--> Installing Python dependencies...")
+
+            corepy.install(["install","-y",*pyv])
+        for val in conf["Nodejs"]:
+            njsv.append(val)
+        if njsv != []:
+            print("--> Installing Nodejs dependencies...")
+
+            corenjs.install(["install","-y",*njsv])
+        for val in conf["Ruby"]:
+            rbv.append(val)
+        if rbv != []:
+            print("--> Installing Ruby dependencies...")
+
+            corerb.install(["install","-y",*rbv])
+        for val in conf["Elisp"]:
+            elv.append(val)
+        if elv != []:
+            print("--> Installing Elisp dependencies...")
+
+            coreel.install(["install","-y",*elv])
+        print(f"--> Installed {len(pyv)} Python Packages")
+        print(f"--> Installed {len(njsv)} Nodejs Packages")
+        print(f"--> Installed {len(rbv)} Ruby Packages")
+        print(f"--> Installed {len(Elisp)} Elisp Packages")
+
+    if opt in ["-li","list"]:
         lang = guess.alz()
         if lang == "python":
             corepy.list()
@@ -376,7 +476,7 @@ def upm():
                 if item != args[0]:
                     output += f" {item}"
             os.system(f"cd {dpath}/plugins && python {args[0]}{output}")
-    if opt in ["source","-so"] or sys.argv[1] in ["-a","pm"]:
+    if opt in ["source","-so"] or arg in ["-a","pm"]:
         if isAdmin() == False:
             return print("Error: Administrator is required for sources")
         if "add" == arg or "+" == arg:
@@ -389,14 +489,14 @@ def upm():
             removesrc(dpath,args[0])
         if "update" == arg:
             update(dpath)
-    if opt in ["start"] or sys.argv[1] in ["start"]:
+    if opt in ["start"] or arg in ["start"]:
         upx = cfg()
         torun = upx["Run"]
         print(f"""--> Running: "{torun}" """)
         os.system(torun)
 
 try:
-    version = requests.request("GET",url="https://n30nyx.github.io/upm/version.txt")
+    version = requests.request("GET",url="https://n30nyx.github.io/index/version.txt")
     version = version.text
     version = version.replace("\n","")
     version  =version.replace(" ","")
@@ -407,7 +507,7 @@ try:
     content  = content.replace(" ","")
     content = int(content)
     if version > content:
-        print("-----\nAn update is availiable! Please type upm --update or get it manually from the github repo.\n-----")
+        print("-----\nAn update is availiable! Please type index update or get it manually from the github repo.\n-----")
 except:
     ok = "ok"
 

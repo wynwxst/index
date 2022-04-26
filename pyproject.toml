@@ -6,6 +6,9 @@ authors = ["Eris9 <cool5tarxv@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pip = "^22.0.4"
+discord = "^1.7.3"
+ramael = "^0.0.1"
 
 [tool.poetry.dev-dependencies]
 

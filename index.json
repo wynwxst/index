@@ -1,14 +1,28 @@
-
 {
-"Name": "Enter package name",
-"Author(s)": ["author1","author2","author3"],
-"Description": "An example package...",
-"Version": "0.0.1",
-"Run": "echo please enter a run script",
-"Main_file": "used to guess imports",
-"Python": [],
-"Nodejs": [],
-"Ruby": [],
-"Elisp": []
+    "Name": "Enter package name",
+    "Author(s)": [
+        "author1",
+        "author2",
+        "author3"
+    ],
+    "Description": "An example package...",
+    "Version": "0.0.1",
+    "env": {
+        "silent": "true",
+        "key": "secret"
+    },
+    "config": {
+        "guess_imports": "true"
+    },
+    "Scripts": {
+        "start": "echo put something here"
+    },
+    "Main_file": "used to guess imports by default",
+    "Python": [
+        "ramael",
+        "ramael"
+    ],
+    "Nodejs": [],
+    "Ruby": [],
+    "Elisp": []
 }
-        

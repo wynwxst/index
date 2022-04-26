@@ -3,6 +3,25 @@ import sys
 import getopt
 import subprocess
 import os
+import json
+from sys import platform
+oopen = open
+def load(f,m="r"):
+    if sys.platform.startswith("win") == False:
+        f = f.replace("\\","/")
+        return open(f,m)
+    else:
+        f = f.replace("/","\\")
+        return open(f,m)
+if platform == "win32" or platform == "win64":
+    dpath = f"{os.getenv('APPDATA')}\\index"
+    path = os.getenv('APPDATA')
+elif platform == "linux" or platform == "linux2" or platform == "darwin":
+    dpath = "/etc/index"
+    path = "/etc"
+
+config = load(f"{dpath}\\config.json","r")
+pack = json.load(config)["pypackager"]
 def rl(the_list, val):
    return [value for value in the_list if value != val]
 
@@ -75,8 +94,8 @@ def remover(args):
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "pyproject.toml" not in files:
-    print("--> python -m poetry init --no-interaction")
-    os.system("python -m poetry init --no-interaction")
+    print("--> python -m {pack} init --no-interaction")
+    os.system("python -m {pack} init --no-interaction")
   toprint = ""
   packages = args
   packages.remove(packages[0])
@@ -90,28 +109,28 @@ def remover(args):
     if query == "y":
       for item in packages:
         if item != "-y":
-          print(f"--> python -m poetry remove {item}")
-          os.system(f"python -m poetry remove {item}")
+          print(f"--> python -m {pack} remove {item}")
+          os.system(f"python -m {pack} remove {item}")
     else:
       print("Exiting...")
       exit()
   if conf == False:
       for item in packages:
           if item != "-y":
-            print(f"--> python -m poetry remove {item}")
-            os.system(f"python -m poetry remove {item}")
+            print(f"--> python -m {pack} remove {item}")
+            os.system(f"python -m {pack} remove {item}")
 
 def lock():
   print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "pyproject.toml" not in files:
-    print("--> python -m poetry init --no-interaction")
-    os.system("python -m poetry init --no-interaction")
-  print("--> python -m poetry lock")
-  os.system("python -m poetry lock")
-  print("--> python -m poetry install")
-  os.system("python -m poetry install")
+    print("--> python -m {pack} init --no-interaction")
+    os.system("python -m {pack} init --no-interaction")
+  print("--> python -m {pack} lock")
+  os.system("python -m {pack} lock")
+  print("--> python -m {pack} install")
+  os.system("python -m {pack} install")
 
 def install(args):
 
@@ -120,11 +139,11 @@ def install(args):
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "pyproject.toml" not in files:
-    print("--> python -m poetry init --no-interaction")
-    os.system("python -m poetry init --no-interaction")
+    print("--> python -m {pack} init --no-interaction")
+    os.system("python -m {pack} init --no-interaction")
   if len(args) == 1 or args == []:
-    print("--> python -m poetry install")
-    os.system("python -m poetry install")
+    print("--> python -m {pack} install")
+    os.system("python -m {pack} install")
   else:
     toprint = ""
     packages = args
@@ -142,13 +161,13 @@ def install(args):
       if query == "y":
         for item in packages:
           if item != "-y":
-            print(f"--> python -m poetry add {item}")
-            os.system(f"python -m poetry add {item}")
+            print(f"--> python -m {pack} {item}")
+            os.system(f"s:python -m {pack} {item}")
       else:
         print("Exiting...")
         exit()
     if conf == False:
       for item in packages:
           if item != "-y":
-            print(f"--> python -m poetry add {item}")
-            os.system(f"python -m poetry add {item}")
+            print(f"--> python -m {pack} {item}")
+            os.system(f"s:python -m {pack} {item}")
