@@ -175,9 +175,9 @@ def upm():
 "Elisp": []
 }
         """
-        print("--> Creating upm.json...")
-        os.system("touch upm.json")
-        with open(f"{os.getcwd()}/upm.json","w") as x:
+        print("--> Creating index.json...")
+        os.system("touch index.json")
+        with open(f"{os.getcwd()}/index.json","w") as x:
             x.write(temp)
 
     if opt in ["-i","install"]:
@@ -292,15 +292,15 @@ def upm():
         files = []
         for file in os.listdir(os.getcwd()):
             files.append(file)
-        if "upm.json" in files:
-            with open(f"{os.getcwd()}/upm.json") as l:
+        if "index.json" in files:
+            with open(f"{os.getcwd()}/index.json") as l:
                 upx = json.load(l)
         torun = upx["Run"]
         print(f"""--> Running: "{torun}" """)
         os.system(torun)
 
 try:
-    version = requests.request("GET",url="https://k0nami.github.io/upm/version.txt")
+    version = requests.request("GET",url="https://n30nyx.github.io/upm/version.txt")
     version = version.text
     version = version.replace("\n","")
     version  =version.replace(" ","")

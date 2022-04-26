@@ -1,10 +1,10 @@
-# [WIP] upm
-
+# [WIP] Index
+Upm has been renamed to Index, the one stop package manager.
 ### About
-Upm is a universal package manager based on repl.it's upm.
-UPM is the Universal Package Manager. It allows you to manage packages for any (supported) programming language through the same interface following the principle of least astonishment.  to provide deep package manager integration for many different programming languages using the same infrastructure.
+Index is a universal package manager based on repl.it's upm.
+Index is the Universal Package Manager. It allows you to manage packages for any (supported) programming language through the same interface following the principle of least astonishment.  to provide deep package manager integration for many different programming languages using the same infrastructure.
 
-UPM does not implement package management itself. Instead, it runs a package manager for you. The value added is:
+Index does not implement package management itself. Instead, it runs a package manager for you. The value added is:
 
 you don't have to figure out whether to use Pip or Pipenv or Poetry to manage your Python packages or wade into the Cabal-versus-Stack holy war in Haskell-land
 
@@ -17,15 +17,17 @@ you don't have to think about why the developers of NPM and Yarn decided to impl
 you don't have to investigate what format the Yarn lockfile is in (turns out: almost YAML, but not quite)
 et cetera (I could go on all day)
 
-In other words, UPM eliminates the need to remember a huge collection of language-specific package manager quirks and weirdness, and adds a few nifty extra features like dependency guessing and machine-parseable specfile and lockfile listing.
+In other words, Index eliminates the need to remember a huge collection of language-specific package manager quirks and weirdness, and adds a few nifty extra features like dependency guessing and machine-parseable specfile and lockfile listing.
 
 ### What makes it better than repl.it's upm
 
-For one thing, it has a better style of guessing and it's got a gui. 
+For one thing, it has a better style of guessing and it's got a gui.
 
 It will also have support for sources aka repositories
 
 As well as repl's package manager not being updated anymore.
+
+Repl's package manager can be annoying at times and this aims to fix that as well.
 
 ### Sources
 
@@ -39,16 +41,16 @@ Sources can have the capabilities to be anything, packages for a language, an in
 
 ### Disclaimer
 
-Upm is not a fully standalone packager and uses existing package managers. However, it does provide easy installation for the package managers.
+Index is not a fully standalone packager and uses existing package managers. However, it does provide easy installation for the package managers.
 
 Sources are standalone and do not require any third party packager
 
 ### Support:
-core - `upm install` `upm lock` `upm remove` `upm list`
+core - `index install` `index lock` `index remove` `index list`
 
-index - `upm search` `upm info`
+index - `index search` `index info`
 
-guess - `upm guess` `upm analyze`
+guess - `index guess` `index analyze`
 
 | Language | Core | Index | Guess |
 |----------|------|-------|-------|
