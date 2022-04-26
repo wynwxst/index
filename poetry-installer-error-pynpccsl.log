@@ -1,0 +1,24 @@
+No pyvenv.cfg file
+
+Traceback:
+
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 879, in main
+    return installer.run()
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 515, in run
+    self.install(version)
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 536, in install
+    with self.make_env(version) as env:
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3312.0_x64__qbz5n2kfra8p0\lib\contextlib.py", line 119, in __enter__
+    return next(self.gen)
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 608, in make_env
+    raise e
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 594, in make_env
+    yield VirtualEnvironment.make(env_path)
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 326, in make
+    env.pip("install", "--disable-pip-version-check", "--upgrade", "pip")
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 349, in pip
+    return self.python("-m", "pip", "--isolated", *args, **kwargs)
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 346, in python
+    return self.run(self._python, *args, **kwargs)
+  File "C:\Users\blzza\Downloads\upm\get-poetry.py", line 339, in run
+    raise PoetryInstallationError(

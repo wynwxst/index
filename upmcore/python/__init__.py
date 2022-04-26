@@ -3,10 +3,54 @@ import sys
 import getopt
 import subprocess
 import os
-
+def rl(the_list, val):
+   return [value for value in the_list if value != val]
 
 amt = 0
 files = []
+
+def guess_import(f):
+    c = ""
+    try:
+        with open(f,"r") as x:
+            c = x.readlines()
+        pkgs = []
+        for l in c:
+            p = ""
+            l = l.rstrip()
+            l = l.replace("\t","")
+            l = l.replace("  ","")
+            l = l.replace(" , ",",")
+            if l.startswith("from"):
+                p = l.split("import",1)
+                p = p[0]
+                p = p.replace("from ","")
+            if l.startswith("import"):
+                p = l.split("import",1)[-1]
+                if "as" in p:
+                    p = p.split("as",1)[0]
+                if "," in p:
+                    p = p.split(",")
+            if type(p) == list:
+                for i in p:
+                    pkgs.append(i)
+            else:
+                pkgs.append(p)
+        pkgs = rl(pkgs,'')
+        pkgs = rl(pkgs,"")
+        pk = []
+        for i in pkgs:
+
+            pk.append(i.replace(" ",""))
+        return pk
+
+
+
+
+    except FileNotFoundError:
+        print("Error: File not found")
+        return []
+
 
 
 
@@ -27,7 +71,7 @@ def list():
 
 def remover(args):
   conf = True
-  print("[Upm]: Updating package configuration")
+  print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "pyproject.toml" not in files:
@@ -58,7 +102,7 @@ def remover(args):
             os.system(f"python -m poetry remove {item}")
 
 def lock():
-  print("[Upm]: Updating package configuration")
+  print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "pyproject.toml" not in files:
@@ -72,7 +116,7 @@ def lock():
 def install(args):
 
   conf = True
-  print("[Upm]: Updating package configuration")
+  print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "pyproject.toml" not in files:

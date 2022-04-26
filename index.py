@@ -18,6 +18,50 @@ import upmguess as guess
 import ctypes
 from funcs import *
 import requests
+from os import system as execa
+def run(command):
+    return subprocess.check_output(command,shell=True).decode("utf-8")
+def execute(c,s=False):
+
+
+    import subprocess
+    process = None
+    try:
+        bashCommand = c
+        bc = bashCommand.split()
+        nc = []
+        for item in bc:
+            item = item.replace("%20"," ")
+            nc.append(item)
+        process = subprocess.run(c.replace("%20"," "), check=True,text=True)
+        o = process.stdout
+        if o != None:
+            return o
+        else:
+            return ""
+    except Exception as e:
+        if str(e).endswith("1.") == False:
+            if s == False:
+                return e
+    return
+def execai(c):
+    if c.startswith("s:"):
+        c = c.replace("s:","")
+        return run(c)
+
+    else:
+        print(f"--> {c}")
+        execute(c)
+os.system = execai
+def cfg():
+    upx = None
+    files = []
+    for file in os.listdir(os.getcwd()):
+        files.append(file)
+    if "index.json" in files:
+        with open(f"{os.getcwd()}/index.json") as l:
+            upx = json.load(l)
+    return upx
 
 def all(opt,arg,args):
 
@@ -86,9 +130,9 @@ def send_help():
 
 advanced = ["language =","help","guess","install =","install","project","remove =","remove","lock","info =","search =","listlangs","als","default","plugin =","dep","dependencies","pm =","init","start"]
 
-def run(command):
-    subprocess.check_output(command,shell=True)
 
+def log(c):
+    print(f"[Index]: {c}")
 def upm():
     x = Flags(sys.argv)
     opt = x.flag
@@ -100,6 +144,31 @@ def upm():
 
     if opt in ["-h","help"]:
       send_help()
+    if opt in ["get"]:
+        if arg == "pip":
+            log("Downloading pip...")
+            c = requests.get("https://bootstrap.pypa.io/pip/get-pip.py").text
+            with open("get-pip.py","w+") as pi:
+                pi.write(c)
+            log("Updating pip configuration...")
+            os.system("s:python3 get-pip.py")
+            log("Running Postinstall...")
+            print("--> rm -rf get-pip.py")
+            os.remove("get-pip.py")
+            ver = os.system("s:pip --version").split()[1]
+            log(f"Installed pip v{ver}")
+        if arg == "poetry":
+            log("Downloading poetry...")
+            c = requests.get("https://install.python-poetry.org/").text
+            with open("get-poetry.py","w+") as pi:
+                pi.write(c)
+            log("Updating poetry configuration...")
+            os.system("s:python3 get-poetry.py")
+            log("Running Postinstall...")
+            print("--> rm -rf get-poetry.py")
+            #os.remove("get-poetry.py")
+            #ver = os.system("s:poetry --version").split()[2]
+            #log(f"Installed poetry v{ver}")
     if opt in ["-g","guess"]:
         guess.guess()
     if opt in ['-l',"language"]:
@@ -169,6 +238,7 @@ def upm():
 "Description": "An example package...",
 "Version": "0.0.1",
 "Run": "echo please enter a run script",
+"Main_file": "used to guess imports",
 "Python": [],
 "Nodejs": [],
 "Ruby": [],
@@ -179,12 +249,43 @@ def upm():
         os.system("touch index.json")
         with open(f"{os.getcwd()}/index.json","w") as x:
             x.write(temp)
+    if opt in ["imports"]:
+        tp = ""
+        lang = guess.alz()
+        f = arg
+        if lang == "python":
+            if cfg()["Main_file"] != "used to guess imports":
+                f = cfg()["Main_file"]
+
+            for i in corepy.guess_import(f):
+                if i == corepy.guess_import(f)[-1]:
+                    tp += f"{i}"
+                else:
+                    tp += f"{i}, "
+            print(tp)
+
+    if opt in ["-imp","import"]:
+        lang = guess.alz()
+        f = arg
+        if lang == "python":
+            if cfg()["Main_file"] != "used to guess imports":
+                f = cfg()["Main_file"]
+            ex = ""
+
+
+            opt = "install"
+            arg = ""
+            args = [*corepy.guess_import(f),*args]
+
 
     if opt in ["-i","install"]:
         files = []
 
         list = ["install"]
-        list.append(arg)
+        if arg == "":
+            pass
+        else:
+            list.append(arg)
         for item in args:
             list.append(item)
         lang = guess.alz()
@@ -268,7 +369,7 @@ def upm():
         for file in os.listdir(f"{dpath}/plugins"):
             plugins.append(file)
         if args[0] not in plugins:
-            return print("[Upm]: Plugin not found.")
+            return print("[Index]: Plugin not found.")
         else:
             output = ""
             for item in args:
@@ -289,12 +390,7 @@ def upm():
         if "update" == arg:
             update(dpath)
     if opt in ["start"] or sys.argv[1] in ["start"]:
-        files = []
-        for file in os.listdir(os.getcwd()):
-            files.append(file)
-        if "index.json" in files:
-            with open(f"{os.getcwd()}/index.json") as l:
-                upx = json.load(l)
+        upx = cfg()
         torun = upx["Run"]
         print(f"""--> Running: "{torun}" """)
         os.system(torun)

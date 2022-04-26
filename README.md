@@ -29,6 +29,13 @@ As well as repl's package manager not being updated anymore.
 
 Repl's package manager can be annoying at times and this aims to fix that as well.
 
+### Installation of package managers
+#### Python:
+| Name     | Pip  | Poetry|
+|----------|------|-------|
+| Python   | yes  | yes   |
+
+
 ### Sources
 
 You will be able to add sources through the gui and the cli version.

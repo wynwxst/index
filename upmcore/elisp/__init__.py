@@ -15,7 +15,7 @@ def list():
 
 def remover(args):
   conf = True
-  print("[Upm]: Updating package configuration")
+  print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "Cask" not in files:
@@ -60,7 +60,7 @@ def remover(args):
     os.system(f"cask install")
 
 def lock():
-  print("[Upm]: Updating package configuration")
+  print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "Cask" not in files:
@@ -71,7 +71,7 @@ def lock():
 
 def install(args):
   conf = True
-  print("[Upm]: Updating package configuration")
+  print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "Cask" not in files:

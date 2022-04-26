@@ -20,7 +20,7 @@ def list():
   print(toprint)
 
 def remover(args):
-  print("[Upm]: Updating package configuration")
+  print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "package.json" not in files:
@@ -53,7 +53,7 @@ def remover(args):
 
 def install(args):
   conf = True
-  print("[Upm]: Updating package configuration")
+  print("[Index]: Updating package configuration")
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "package.json" not in files:

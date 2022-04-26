@@ -7,14 +7,19 @@ import requests
 from sys import platform
 
 def search(args):
-    if platform == "win32" or platform == "win64":
-        path = r"C:\Windows\System32\upm\resources\python\pypi"
-    elif platform == "linux" or platform == "linux2" or platform == "darwin":
-        path = "/usr/bin/upm/resources/python/pypi"
-    f = open(path,"r")
+    from lxml import html
+    import requests
+
+    response = requests.get("https://pypi.org/simple/")
+
+    tree = html.fromstring(response.content)
+
+    content = [package for package in tree.xpath('//a/text()')]
+
+
     if "--all" == args[1] or "-a" == args[1]:
-      content = f.read()
-      print(content)
+      for i in content:
+          print(f"{i}")
     else:
       print("--> Searching...")
       pypi = []
@@ -32,15 +37,12 @@ def search(args):
             query = item
       q2 = query.replace(" ","-")
       q2 = query.replace(".","-")
-      content = f.read()
-      line = content.replace("\n"," ")
-      contents = line.split(" ")
-      for item in contents:
-          if item == query:
-              print(item)
-      for item in contents:
-        if query == item or q2 == item or q2 in item or query in item:
-          print(f"{item}\n")
+
+
+      for item in content:
+
+        if query.lower() == item.lower() or q2.lower() == item.lower() or q2.lower() in item.lower() or query.lower() in item.lower():
+          print(f"{item}")
       print("--> Finished Search!")
 
 def info(args):
