@@ -21,6 +21,7 @@ elif platform == "linux" or platform == "linux2" or platform == "darwin":
     path = "/etc"
 
 config = load(f"{dpath}\\config.json","r")
+global pack
 pack = json.load(config)["pypackager"]
 def rl(the_list, val):
    return [value for value in the_list if value != val]
@@ -125,12 +126,12 @@ def lock():
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "pyproject.toml" not in files:
-    print("--> python -m {pack} init --no-interaction")
-    os.system("python -m {pack} init --no-interaction")
-  print("--> python -m {pack} lock")
-  os.system("python -m {pack} lock")
-  print("--> python -m {pack} install")
-  os.system("python -m {pack} install")
+    print(f"--> python -m {pack} init --no-interaction")
+    os.system(f"python -m {pack} init --no-interaction")
+  print(f"--> python -m {pack} lock")
+  os.system(f"python -m {pack} lock")
+  print(f"--> python -m {pack} install")
+  os.system(f"python -m {pack} install")
 
 def install(args):
 
@@ -139,11 +140,11 @@ def install(args):
   for file in os.listdir(os.getcwd()):
     files.append(file)
   if "pyproject.toml" not in files:
-    print("--> python -m {pack} init --no-interaction")
-    os.system("python -m {pack} init --no-interaction")
+    print(f"--> python -m {pack} init --no-interaction")
+    os.system(f"python -m {pack} init --no-interaction")
   if len(args) == 1 or args == []:
-    print("--> python -m {pack} install")
-    os.system("python -m {pack} install")
+    print(f"--> python -m {pack} install")
+    os.system(f"python -m {pack} install")
   else:
     toprint = ""
     packages = args
@@ -161,13 +162,13 @@ def install(args):
       if query == "y":
         for item in packages:
           if item != "-y":
-            print(f"--> python -m {pack} {item}")
-            os.system(f"s:python -m {pack} {item}")
+            print(f"--> python -m {pack} add {item}")
+            os.system(f"s:python -m {pack} add {item}")
       else:
         print("Exiting...")
         exit()
     if conf == False:
       for item in packages:
           if item != "-y":
-            print(f"--> python -m {pack} {item}")
-            os.system(f"s:python -m {pack} {item}")
+            print(f"--> python -m {pack} add {item}")
+            os.system(f"s:python -m {pack} add {item}")

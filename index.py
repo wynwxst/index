@@ -33,7 +33,10 @@ def load(f,m="r"):
         return open(f,m)
 
 def run(command):
-    return subprocess.check_output(command,shell=True).decode("utf-8")
+    try:
+        return subprocess.check_output(command,shell=True).decode("utf-8")
+    except:
+        subprocess.check_output(command,shell=True)
 def execute(c,s=False):
 
 
