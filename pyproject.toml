@@ -5,8 +5,8 @@ description = ""
 authors = ["Eris9 <cool5tarxv@gmail.com>"]
 
 [tool.poetry.dependencies]
-requests = "^1.0"
-lxml = "^1.0"
+requests = "^2.27.1"
+lxml = "^4.8.0"
 
 [tool.poetry.dev-dependencies]
 
