@@ -18,10 +18,7 @@
         "start": "echo put something here"
     },
     "Main_file": "used to guess imports by default",
-    "Python": [
-        "ramael",
-        "ramael"
-    ],
+    "Python": [],
     "Nodejs": [],
     "Ruby": [],
     "Elisp": []

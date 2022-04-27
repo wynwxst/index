@@ -6,7 +6,7 @@ from funcs import zip
 
 
 def run(command):
-    subprocess.check_output(command,shell=True)
+    return subprocess.check_output(command,shell=True).decode("utf-8")
 
 if platform == "win32" or platform == "win64":
     ver = input("Build Version: ")
@@ -15,7 +15,7 @@ if platform == "win32" or platform == "win64":
     os.system(f"cd dist/{ver} && mkdir src")
     print("--> Building binary....")
     os.system(f"python setup.py py2exe -d dist/{ver}/src/")
-    print(f"--> Built binary in dist/{ver}")
+    print(f"--> Built binary in dist/{ver}/src/")
     print("--> Building zip...")
     zip(f"dist/{ver}/{ver}",f"dist/{ver}/src/")
 elif platform == "linux" or platform == "linux2":

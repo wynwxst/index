@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 from flags import Flags
 import time
 import sys
@@ -19,6 +19,10 @@ import ctypes
 from funcs import *
 import requests
 from os import system as execa
+import packaging
+import packaging.version
+import packaging.specifiers
+import packaging.requirements
 
 def load(f,m="r"):
     if sys.platform.startswith("win") == False:
@@ -199,7 +203,7 @@ def upm():
             with open("get-pip.py","w+") as pi:
                 pi.write(c)
             log("Updating pip configuration...")
-            os.system("s:python3 get-pip.py")
+            os.system("s:python get-pip.py")
             log("Running Postinstall...")
             print("--> rm -rf get-pip.py")
             os.remove("get-pip.py")
@@ -211,7 +215,7 @@ def upm():
             with open("get-poetry.py","w+") as pi:
                 pi.write(c)
             log("Updating poetry configuration...")
-            os.system("s:python3 get-poetry.py")
+            os.system("s:python get-poetry.py")
             log("Running Postinstall...")
             print("--> rm -rf get-poetry.py")
             os.remove("get-poetry.py")
